@@ -7,7 +7,7 @@ const resolvers = {
         // By adding context to our query, we can retrieve the logged in user without specifically searching for them
         me: async (parent, args, context) => {
             if (context.user) {
-              return Profile.findOne({ _id: context.user._id });
+              return User.findOne({ _id: context.user._id });
             }
             throw new AuthenticationError('You need to be logged in!');
           }
@@ -17,7 +17,7 @@ const resolvers = {
             const user = await User.findOne({ email });
       
             if (!user) {
-              throw new AuthenticationError('No profile with this email found!');
+              throw new AuthenticationError('No user with this email found!');
             }
       
             const correctPw = await user.isCorrectPassword(password);
@@ -29,10 +29,11 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
         },
-        addUser: async (parent, { name, email, password }) => {
-            const user = await User.create({ name, email, password });
+        addUser: async (parent, { username, email, password }) => {
+            //console.log("INSIDE ADD USER !!!!!!!!!");
+            const user = await User.create({ username, email, password });
             const token = signToken(user);
-      
+            //console.log("returning token");
             return { token, user };
         }, 
         saveBook: async (parent, args, context) => {
