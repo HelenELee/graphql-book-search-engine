@@ -81,10 +81,13 @@ const SearchBooks = () => {
     try {
       //const response = await saveBook(bookToSave, token);
       console.log("About to do saveBook");
+
+      const { bookId, ...bookData } = bookToSave;
+
       const { data } = await saveBook({
         variables: {
-          bookId: bookToSave.bookId,
-          ...bookToSave
+         // bookId: bookId,
+          ...bookData
         }
       });
       console.log("DID SAVE!");
