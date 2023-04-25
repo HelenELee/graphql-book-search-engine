@@ -29,9 +29,9 @@ const typeDefs = gql`
 
   input SaveBook {
     bookId: String!
-    authors:[String]!
-    title: String!
-    description: String!
+    authors:[String]
+    title: String
+    description: String
     image: String
     link: String
   }

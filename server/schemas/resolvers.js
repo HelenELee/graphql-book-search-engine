@@ -37,8 +37,12 @@ const resolvers = {
             return { token, user };
         }, 
         saveBook: async (parent, args, context) => {
+            
             if (context.user) {
+                
+                console.log("FOUND USER!!!!!");
                 const book = await Book.create({
+                    bookId: args.bookId,
                     authors: args.authors,
                     description: args.description,
                     image: args.image,

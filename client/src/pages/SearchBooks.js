@@ -9,8 +9,11 @@ import {
 } from 'react-bootstrap';
 
 import Auth from '../utils/auth';
-import { saveBook, searchGoogleBooks } from '../utils/API';
+import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
+import { useMutation } from '@apollo/client';
+import { SAVE_BOOK } from '../utils/mutations'
+
 
 const SearchBooks = () => {
   // create state for holding returned google api data
@@ -20,6 +23,7 @@ const SearchBooks = () => {
 
   // create state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
+  const [ saveBook, { error, data }] = useMutation(SAVE_BOOK);
 
   // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
   // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
@@ -61,22 +65,33 @@ const SearchBooks = () => {
 
   // create function to handle saving a book to our database
   const handleSaveBook = async (bookId) => {
+    console.log("inside handleSaveBook");
     // find the book in `searchedBooks` state by the matching id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
-
+    console.log("Found book...");
     // get token
     const token = Auth.loggedIn() ? Auth.getToken() : null;
+    console.log("Did Auth");
 
     if (!token) {
       return false;
     }
+    console.log(bookToSave);
 
     try {
-      const response = await saveBook(bookToSave, token);
-
+      //const response = await saveBook(bookToSave, token);
+      console.log("About to do saveBook");
+      const { data } = await saveBook({
+        variables: {
+          bookId: bookToSave.bookId,
+          ...bookToSave
+        }
+      });
+      console.log("DID SAVE!");
+      /*
       if (!response.ok) {
         throw new Error('something went wrong!');
-      }
+      }*/
 
       // if book successfully saves to user's account, save book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
@@ -123,7 +138,7 @@ const SearchBooks = () => {
         <Row>
           {searchedBooks.map((book) => {
             return (
-              <Col md="4">
+              <Col md="4" key={book.bookId}>
                 <Card key={book.bookId} border='dark'>
                   {book.image ? (
                     <Card.Img src={book.image} alt={`The cover for ${book.title}`} variant='top' />
