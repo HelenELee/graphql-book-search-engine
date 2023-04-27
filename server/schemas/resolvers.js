@@ -36,29 +36,22 @@ const resolvers = {
             //console.log("returning token");
             return { token, user };
         }, 
-        saveBook: async (parent, args, context) => {
+        saveBook: async (parent, { input }, context) => {
+            console.log("resolvers - saveBook");
             
             if (context.user) {
-                
-                console.log("FOUND USER!!!!!");
-                const book = await Book.create({
-                    bookId: args.bookId,
-                    authors: args.authors,
-                    description: args.description,
-                    image: args.image,
-                    link: args.link,
-                    title: args.title,
-                  });
-                return User.findOneAndUpdate(
+                console.log("FOUND USER!!!!!");  
+                const updatedUser = await User.findOneAndUpdate(
                     {_id: context.user._id},
                     {
-                        $addToSet: {savedBooks: book},
+                        $addToSet: {savedBooks: input},
                     },
                     {
                         new: true,
                         runValidators: true,
                     }
                 );
+                return updatedUser;
             }
              // If user attempts to execute this mutation and isn't logged in, throw an error
             throw new AuthenticationError('You need to be logged in!');
@@ -69,9 +62,10 @@ const resolvers = {
               //  const book = await Book.findOneAndDelete({bookId: bookId});
                 return User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: {bookId: params.bookId} } },
+                    { $pull: { savedBooks: {bookId: bookId} } },
                     { new: true }
                 );
+                return updatedUser;
             }
             throw new AuthenticationError('You need to be logged in!');
         },
