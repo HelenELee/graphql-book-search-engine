@@ -4,8 +4,8 @@ import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink, } from '@a
 import { setContext } from '@apollo/client/link/context';
 import SearchBooks from './pages/SearchBooks';
 import SavedBooks from './pages/SavedBooks';
-import LoginForm from './components/LoginForm';
-import SignupForm from './components/LoginForm';
+//import LoginForm from './components/LoginForm';
+//import SignupForm from './components/LoginForm';
 import Navbar from './components/Navbar';
 
 // Construct our main GraphQL API endpoint
