@@ -53,11 +53,7 @@ const SavedBooks = () => {
     }
   };
 
-  if (!loading) {
-    console.log("****Saved Books****")
-    console.log(userData.username);
-    console.log("***************")
-  }
+  
   // if data isn't here yet, say so
   if (loading) {
     return <h2>LOADING...</h2>;

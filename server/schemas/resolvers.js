@@ -30,17 +30,15 @@ const resolvers = {
             return { token, user };
         },
         addUser: async (parent, { username, email, password }) => {
-            //console.log("INSIDE ADD USER !!!!!!!!!");
+         
             const user = await User.create({ username, email, password });
             const token = signToken(user);
-            //console.log("returning token");
-            return { token, user };
+           
         }, 
         saveBook: async (parent, { input }, context) => {
-            console.log("resolvers - saveBook");
             
             if (context.user) {
-                console.log("FOUND USER!!!!!");  
+                 
                 const updatedUser = await User.findOneAndUpdate(
                     {_id: context.user._id},
                     {
