@@ -48,11 +48,8 @@
   npm run develop
   ```
 
-  To start the server run:
-  ```
-  npm start
-  ```
-You should see the server startup message:
+
+You should see the application startup message:
 
 ![Here is a screenshot showing the server started.](./images/server-start.png)
 
